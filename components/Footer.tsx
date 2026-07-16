@@ -1,0 +1,1 @@
+export function Footer(){return <footer><div className="footer-mark">SHINEMA</div><p>Un site de cinéma tenu à la main.<br/>Écrit depuis Renens, quelque part entre deux séances.</p><span className="copyright">© 2026 — VERSION 1.0</span></footer>}

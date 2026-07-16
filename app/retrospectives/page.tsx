@@ -1,0 +1,1 @@
+export default function Page(){return <section className="listing"><p className="kicker">SHINEMA / ARCHIVES</p><h1>Retrospectives</h1><p className="empty">Cette rubrique est prête à recevoir ses premiers contenus depuis Sanity Studio.</p></section>}
