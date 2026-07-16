@@ -5,8 +5,8 @@ export function Header(){return <header className="site-header">
   <Image
     src="/images/logo.png"
     alt="SHINEMA"
-    width={360}
-    height={58}
+    width={300}
+    height={55}
     priority
   />
 </Link>
