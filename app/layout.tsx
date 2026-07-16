@@ -3,5 +3,5 @@ import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
 import './globals.css'
 
-export const metadata: Metadata = {title: 'SHINEMA — Cinéma, autrement', description: 'Critiques, classements, rétrospectives et actualités cinéma.'}
+export const metadata: Metadata = {title: 'SHINEMA', description: 'Critiques, classements, rétrospectives et actualités cinéma.'}
 export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="fr"><body><div className="noise"/><Header/><main>{children}</main><Footer/></body></html>}
