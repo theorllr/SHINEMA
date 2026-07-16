@@ -3,7 +3,7 @@ import Image from "next/image";
 export function Header(){return <header className="site-header">
 <Link className="wordmark" href="/">
   <Image
-    src="/images/logo.svg"
+    src="/images/logo.png"
     alt="SHINEMA"
     width={230}
     height={55}
