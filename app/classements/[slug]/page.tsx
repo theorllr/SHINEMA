@@ -1,16 +1,29 @@
 import { notFound } from 'next/navigation'
+import { PortableText } from '@portabletext/react'
 import { client } from '@/lib/sanity'
 
 export const revalidate = 60
 
+type PortableTextBlock = {
+  _key: string
+  _type: string
+  children?: Array<{
+    _key: string
+    _type: string
+    text: string
+    marks?: string[]
+  }>
+  markDefs?: unknown[]
+  style?: string
+  listItem?: string
+  level?: number
+}
+
 type Classement = {
   title: string
-  description?: string
-  films?: Array<{
-    titre?: string
-    annee?: number
-    commentaire?: string
-  }>
+  excerpt?: string
+  publishedAt?: string
+  body?: PortableTextBlock[]
 }
 
 export default async function ClassementPage({
@@ -24,12 +37,9 @@ export default async function ClassementPage({
     `
       *[_type == "ranking" && slug.current == $slug][0] {
         title,
-        description,
-        films[] {
-          titre,
-          annee,
-          commentaire
-        }
+        excerpt,
+        publishedAt,
+        body
       }
     `,
     { slug }
@@ -40,33 +50,32 @@ export default async function ClassementPage({
   }
 
   return (
-    <article className="listing">
-      <p className="kicker">SHINEMA / CLASSEMENT</p>
-      <h1>{classement.title}</h1>
+    <article className="review-page">
+      <header>
+        <p className="kicker">SHINEMA / CLASSEMENT</p>
 
-      {classement.description && (
-        <p className="dek">{classement.description}</p>
-      )}
+        <h1>{classement.title}</h1>
 
-      {classement.films?.length ? (
-        <div className="list">
-          {classement.films.map((film, index) => (
-            <div key={`${film.titre}-${index}`}>
-              <span>{String(index + 1).padStart(2, '0')}</span>
+        <div className="review-meta">
+          {classement.excerpt && <p>{classement.excerpt}</p>}
 
-              <div>
-                <h2>{film.titre}</h2>
-                {film.annee && <p>{film.annee}</p>}
-                {film.commentaire && <p>{film.commentaire}</p>}
-              </div>
-            </div>
-          ))}
+          {classement.publishedAt && (
+            <time dateTime={classement.publishedAt}>
+              {new Date(classement.publishedAt).toLocaleDateString('fr-CH')}
+            </time>
+          )}
         </div>
-      ) : (
-        <p className="empty">
-          Aucun film n’a encore été ajouté à ce classement.
-        </p>
-      )}
+      </header>
+
+      <div className="article-body">
+        {classement.body?.length ? (
+          <PortableText value={classement.body} />
+        ) : (
+          <p className="empty">
+            Aucun film n’a encore été ajouté au classement.
+          </p>
+        )}
+      </div>
     </article>
   )
 }
