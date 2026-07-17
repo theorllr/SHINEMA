@@ -1,11 +1,5 @@
 import type {MetadataRoute} from 'next'
-import {client} from '@/lib/sanity'
-
-type SitemapItem = {
-  slug: string
-  publishedAt?: string
-  _updatedAt?: string
-}
+import {getReviews} from '@/lib/content'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://shinema.fr'
@@ -43,24 +37,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  try {
-    const reviews = await client.fetch<SitemapItem[]>(`
-      *[_type == "review" && defined(slug.current)]{
-        "slug": slug.current,
-        publishedAt,
-        _updatedAt
-      }
-    `)
+  const reviews = await getReviews()
 
-    const reviewPages: MetadataRoute.Sitemap = reviews.map((review) => ({
-      url: `${baseUrl}/critiques/${review.slug}`,
-      lastModified: review._updatedAt || review.publishedAt || new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    }))
+  const reviewPages: MetadataRoute.Sitemap = reviews.map((review) => ({
+    url: `${baseUrl}/critiques/${review.slug}`,
+    lastModified: review.publishedAt
+      ? new Date(review.publishedAt)
+      : new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }))
 
-    return [...staticPages, ...reviewPages]
-  } catch {
-    return staticPages
-  }
+  return [...staticPages, ...reviewPages]
 }
