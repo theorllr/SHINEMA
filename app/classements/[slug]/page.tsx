@@ -1,6 +1,7 @@
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
-import { client } from '@/lib/sanity'
+import { client, urlFor } from '@/lib/sanity'
 
 export const revalidate = 60
 
@@ -19,11 +20,22 @@ type PortableTextBlock = {
   level?: number
 }
 
+type RankingFilm = {
+  _key: string
+  title: string
+  originalTitle?: string
+  year?: number
+  director?: string
+  poster?: unknown
+  comment?: string
+}
+
 type Classement = {
   title: string
   excerpt?: string
   publishedAt?: string
   body?: PortableTextBlock[]
+  films?: RankingFilm[]
 }
 
 export default async function ClassementPage({
@@ -39,7 +51,16 @@ export default async function ClassementPage({
         title,
         excerpt,
         publishedAt,
-        body
+        body,
+        films[] {
+          _key,
+          title,
+          originalTitle,
+          year,
+          director,
+          poster,
+          comment
+        }
       }
     `,
     { slug }
@@ -67,15 +88,62 @@ export default async function ClassementPage({
         </div>
       </header>
 
-      <div className="article-body">
-        {classement.body?.length ? (
+      {classement.body?.length ? (
+        <div className="article-body">
           <PortableText value={classement.body} />
-        ) : (
-          <p className="empty">
-            Aucun film n’a encore été ajouté au classement.
-          </p>
-        )}
-      </div>
+        </div>
+      ) : null}
+
+      {classement.films?.length ? (
+        <section className="ranking-films">
+          {classement.films.map((film, index) => (
+            <article className="ranking-film" key={film._key}>
+              <div className="ranking-position">
+                {String(index + 1).padStart(2, '0')}
+              </div>
+
+              {film.poster ? (
+                <div className="ranking-poster">
+                  <Image
+                    src={urlFor(film.poster)
+                      .width(600)
+                      .height(900)
+                      .url()}
+                    alt={`Affiche de ${film.title}`}
+                    fill
+                    sizes="(max-width: 700px) 120px, 220px"
+                  />
+                </div>
+              ) : (
+                <div className="ranking-poster ranking-poster-empty">
+                  Sans affiche
+                </div>
+              )}
+
+              <div className="ranking-film-copy">
+                <p className="kicker">
+                  {film.year ?? ''}
+                  {film.director ? ` — ${film.director}` : ''}
+                </p>
+
+                <h2>{film.title}</h2>
+
+                {film.originalTitle && (
+                  <p className="ranking-original-title">
+                    {film.originalTitle}
+                  </p>
+                )}
+
+                {film.comment && <p>{film.comment}</p>}
+              </div>
+            </article>
+          ))}
+        </section>
+      ) : (
+        <p className="empty ranking-empty">
+          Aucun film structuré n’a encore été ajouté à ce classement.
+        </p>
+      )}
     </article>
   )
 }
