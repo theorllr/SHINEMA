@@ -6,7 +6,7 @@ export function Header(){return <header className="site-header">
     src="/images/logo.svg"
     alt="SHINEMA"
     width={300}
-    height={55}
+    height={56}
     priority
   />
 </Link>
