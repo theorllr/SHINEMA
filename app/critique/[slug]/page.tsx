@@ -71,13 +71,11 @@ export async function generateMetadata(
   }
 }
 export default async function ReviewPage({params}: ReviewPageProps) {const {slug}=await params;const r=await getReview(slug);if(!r)notFound();const image=r.mainImage?urlFor(r.mainImage).width(1200).height(1600).url():'/new-religion.jpg';return <article className="review-page"><header><p className="kicker">CRITIQUE / {r.director.toUpperCase()} / {r.year}</p><h1>{r.articleTitle}</h1><div className="review-meta"><div><em>{r.filmTitle}</em><br/>{r.director}, {r.year}</div><div className="rating"><strong>{r.rating}</strong><span>/10</span></div></div></header><div className="review-hero">
-  <Image
-    src={image}
-    alt={`Image de ${r.filmTitle}`}
-    width={1600}
-    height={900}
-    priority
-    sizes="(max-width: 900px) 94vw, 94vw"
-    className="review-hero-image"
-  />
+<Image
+  src={image}
+  alt={`Affiche de ${r.filmTitle}`}
+  fill
+  priority
+  sizes="100vw"
+/>
 </div><div className="article-body">{r.body ? <PortableText value={r.body as never}/> : fallbackParagraphs.map((p,i)=><p key={i}>{p}</p>)}</div></article>}
