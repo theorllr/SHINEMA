@@ -1,2 +1,30 @@
-import Link from 'next/link'; import {getReviews} from '@/lib/content'
-export default async function Critiques(){const reviews=await getReviews();return <section className="listing"><p className="kicker">ARCHIVES / CRITIQUES</p><h1>Critiques</h1><div className="list">{reviews.map(r=><Link href={`/critique/${r.slug}`} key={r._id}><span>{r.rating}/10</span><div><h2>{r.filmTitle}</h2><p>{r.articleTitle} — {r.director}, {r.year}</p></div><b>↗</b></Link>)}</div></section>}
+import Link from 'next/link'
+import {getReviews} from '@/lib/content'
+
+export const revalidate = 0
+
+export default async function Critiques() {
+  const reviews = await getReviews()
+
+  return (
+    <section className="listing">
+      <p className="kicker">ARCHIVES / CRITIQUES</p>
+      <h1>Critiques</h1>
+
+      <div className="list">
+        {reviews.map((r) => (
+          <Link href={`/critique/${r.slug}`} key={r._id}>
+            <span>{r.rating}/10</span>
+
+            <div>
+              <h2>{r.filmTitle}</h2>
+              <p>{r.articleTitle} — {r.director}, {r.year}</p>
+            </div>
+
+            <b>↗</b>
+          </Link>
+        ))}
+      </div>
+    </section>
+  )
+}
