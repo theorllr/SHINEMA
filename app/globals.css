@@ -223,3 +223,10 @@
     padding: 32px 24px;
   }
 }
+.article-page img {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  margin: 2.5rem auto 3.5rem;
+  height: auto;
+}
