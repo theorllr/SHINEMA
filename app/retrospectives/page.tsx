@@ -1,5 +1,7 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { getRetrospectives } from '@/lib/content'
+import {getRetrospectives} from '@/lib/content'
+import {urlFor} from '@/lib/sanity'
 
 export default async function Page() {
   const retrospectives = await getRetrospectives()
@@ -10,19 +12,45 @@ export default async function Page() {
       <h1>Rétrospectives</h1>
 
       {retrospectives.length === 0 ? (
-        <p className="empty">
-          Aucune rétrospective publiée.
-        </p>
+        <p className="empty">Aucune rétrospective publiée.</p>
       ) : (
-        <div className="grid">
+        <div className="retrospective-list">
           {retrospectives.map((article) => (
-            <article key={article._id}>
-              <Link href={`/retrospectives/${article.slug}`}>
-                <h2>{article.title}</h2>
-              </Link>
+            <Link
+              key={article._id}
+              href={`/retrospectives/${article.slug}`}
+              className="retrospective-card"
+            >
+              {article.mainImage != null && (
+                <div className="retrospective-image">
+                  <Image
+                    src={urlFor(article.mainImage as any)
+                      .width(1200)
+                      .height(700)
+                      .url()}
+                    alt={article.title}
+                    width={1200}
+                    height={700}
+                  />
+                </div>
+              )}
 
-              <p>{article.excerpt}</p>
-            </article>
+              <div className="retrospective-content">
+                <p className="retrospective-label">
+                  RÉTROSPECTIVE
+                </p>
+
+                <h2>{article.title}</h2>
+
+                {article.excerpt && (
+                  <p>{article.excerpt}</p>
+                )}
+
+                <span className="retrospective-link">
+                  Lire l’article →
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
       )}
