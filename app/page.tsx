@@ -110,21 +110,20 @@ export default async function Home() {
               className="side-card"
               href={`/retrospectives/${latestRetrospective.slug}`}
             >
-           {latestRetrospective.mainImage && (
+     {latestRetrospective.mainImage != null && (
   <div className="side-card-image">
     <Image
-      src={urlFor(latestRetrospective.mainImage)
+      src={urlFor(latestRetrospective.mainImage as any)
         .width(700)
         .height(420)
         .quality(90)
         .url()}
       alt={latestRetrospective.title}
       fill
-      sizes="(max-width:900px) 100vw, 25vw"
+      sizes="(max-width: 900px) 100vw, 25vw"
     />
   </div>
 )}
-
               <div>
                 <span className="tag">RÉTROSPECTIVE</span>
 
