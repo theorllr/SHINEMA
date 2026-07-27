@@ -96,6 +96,67 @@ export async function getRetrospective(
     return null
   }
 }
+export async function getRankings(): Promise<Ranking[]> {
+  try {
+    return await client.fetch<Ranking[]>(`
+      *[_type == "ranking"] | order(publishedAt desc) {
+        _id,
+        title,
+        "slug": slug.current,
+        excerpt,
+        publishedAt,
+        mainImage,
+        body,
+        films[] {
+          _key,
+          title,
+          originalTitle,
+          year,
+          director,
+          poster,
+          comment
+        }
+      }
+    `)
+  } catch {
+    return []
+  }
+}
+
+export async function getRanking(
+  slug: string
+): Promise<Ranking | null> {
+  try {
+    return await client.fetch<Ranking | null>(
+      `
+        *[
+          _type == "ranking" &&
+          slug.current == $slug
+        ][0] {
+          _id,
+          title,
+          "slug": slug.current,
+          excerpt,
+          publishedAt,
+          mainImage,
+          body,
+          films[] {
+            _key,
+            title,
+            originalTitle,
+            year,
+            director,
+            poster,
+            comment
+          }
+        }
+      `,
+      {slug}
+    )
+  } catch {
+    return null
+  }
+}
 export function getReadingTime(body?: unknown[]): number {
   if (!body) return 1
 
