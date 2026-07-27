@@ -118,3 +118,23 @@ export function getReadingTime(body?: unknown[]): number {
 
   return Math.max(1, Math.ceil(wordCount / 200))
 }
+export type RankingFilm = {
+  _key: string
+  title: string
+  originalTitle?: string
+  year?: number
+  director?: string
+  poster?: unknown
+  comment?: string
+}
+
+export type Ranking = {
+  _id: string
+  title: string
+  slug: string
+  excerpt?: string
+  publishedAt: string
+  mainImage?: unknown
+  body?: unknown[]
+  films?: RankingFilm[]
+}
