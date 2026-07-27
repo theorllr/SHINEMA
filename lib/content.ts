@@ -43,3 +43,56 @@ export async function getReview(slug: string): Promise<Review | null> {
     return review || (slug === fallbackReview.slug ? fallbackReview : null)
   } catch { return slug === fallbackReview.slug ? fallbackReview : null }
 }
+export type Retrospective = {
+  _id: string
+  title: string
+  slug: string
+  excerpt: string
+  publishedAt: string
+  mainImage?: unknown
+  body?: unknown[]
+}
+
+export async function getRetrospectives(): Promise<Retrospective[]> {
+  try {
+    return await client.fetch<Retrospective[]>(`
+      *[_type == "retrospective"] | order(publishedAt desc) {
+        _id,
+        title,
+        "slug": slug.current,
+        excerpt,
+        publishedAt,
+        mainImage,
+        body
+      }
+    `)
+  } catch {
+    return []
+  }
+}
+
+export async function getRetrospective(
+  slug: string
+): Promise<Retrospective | null> {
+  try {
+    return await client.fetch<Retrospective | null>(
+      `
+        *[
+          _type == "retrospective" &&
+          slug.current == $slug
+        ][0] {
+          _id,
+          title,
+          "slug": slug.current,
+          excerpt,
+          publishedAt,
+          mainImage,
+          body
+        }
+      `,
+      {slug}
+    )
+  } catch {
+    return null
+  }
+}
