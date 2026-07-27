@@ -45,9 +45,9 @@ export default async function RetrospectivePage({
         )}
       </header>
 
-      {article.mainImage && (
+      {article.mainImage != null && (
         <Image
-          src={urlFor(article.mainImage).width(1600).url()}
+          src={urlFor(article.mainImage as any).width(1600).url()}
           alt={article.title}
           width={1600}
           height={900}
