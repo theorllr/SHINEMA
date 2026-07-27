@@ -96,3 +96,25 @@ export async function getRetrospective(
     return null
   }
 }
+export function getReadingTime(body?: unknown[]): number {
+  if (!body) return 1
+
+  const text = body
+    .filter(
+      (block): block is {
+        _type: string
+        children?: {text?: string}[]
+      } =>
+        typeof block === 'object' &&
+        block !== null &&
+        '_type' in block
+    )
+    .filter((block) => block._type === 'block')
+    .flatMap((block) => block.children ?? [])
+    .map((child) => child.text ?? '')
+    .join(' ')
+
+  const wordCount = text.trim().split(/\s+/).filter(Boolean).length
+
+  return Math.max(1, Math.ceil(wordCount / 200))
+}
