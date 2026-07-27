@@ -101,8 +101,7 @@ export default async function Home() {
 
         <aside className="hero-side">
           <p className="manifesto">
-            Un journal de cinéma subjectif, sentimental et parfois de
-            mauvaise foi.
+  Chaque film est une porte vers un autre.
           </p>
 
           {latestRetrospective && (
