@@ -1,7 +1,10 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
-import { getRetrospective } from '@/lib/content'
+import {
+  getRetrospective,
+  getReadingTime,
+} from '@/lib/content'
 import { urlFor } from '@/lib/sanity'
 
 type PageProps = {
@@ -19,7 +22,7 @@ export default async function RetrospectivePage({
   if (!article) {
     notFound()
   }
-
+const readingTime = getReadingTime(article.body)
   return (
     <article className="article-page">
       <header>
@@ -31,18 +34,22 @@ export default async function RetrospectivePage({
           <p className="excerpt">{article.excerpt}</p>
         )}
 
-        {article.publishedAt && (
-          <time dateTime={article.publishedAt}>
-            {new Date(article.publishedAt).toLocaleDateString(
-              'fr-FR',
-              {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              }
-            )}
-          </time>
-        )}
+      <div className="article-infos">
+  {article.publishedAt && (
+    <time dateTime={article.publishedAt}>
+      {new Date(article.publishedAt).toLocaleDateString(
+        'fr-FR',
+        {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }
+      )}
+    </time>
+  )}
+
+  <span>{readingTime} min de lecture</span>
+</div>
       </header>
 
       {article.mainImage != null && (
