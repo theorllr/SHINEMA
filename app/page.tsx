@@ -29,7 +29,7 @@ export default async function Home() {
   const tickerItems = [
     ...reviews.map((review) => ({
       title: review.articleTitle,
-      href: `/critiques/${review.slug}`,
+      href: `/critique/${review.slug}`,
       publishedAt: review.publishedAt,
     })),
 
@@ -86,7 +86,7 @@ export default async function Home() {
             <div className="hero-footer">
               <Link
                 className="read-link"
-                href={`/critiques/${lead.slug}`}
+                href={`/critique/${lead.slug}`}
               >
                 Lire la critique ↗
               </Link>
@@ -172,7 +172,7 @@ export default async function Home() {
           {reviews.map((review, index) => (
             <Link
               className="story"
-              href={`/critiques/${review.slug}`}
+              href={`/critique/${review.slug}`}
               key={review._id}
             >
               <span className="index">
