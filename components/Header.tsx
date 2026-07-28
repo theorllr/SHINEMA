@@ -14,18 +14,12 @@ export function Header() {
         />
       </Link>
 
-      <div className="nav-scroll-wrapper">
-        <nav className="main-nav">
-          <Link href="/critiques">Critiques</Link>
-          <Link href="/classements">Classements</Link>
-          <Link href="/retrospectives">Rétrospectives</Link>
-          <Link href="/actualites">Actualités</Link>
-        </nav>
-
-        <span className="nav-scroll-hint" aria-hidden="true">
-          →
-        </span>
-      </div>
+      <nav className="main-nav">
+        <Link href="/critiques">Critiques</Link>
+        <Link href="/classements">Classements</Link>
+        <Link href="/retrospectives">Rétrospectives</Link>
+        <Link href="/actualites">Actualités</Link>
+      </nav>
     </header>
   )
 }
